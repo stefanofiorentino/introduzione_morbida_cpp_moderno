@@ -31,6 +31,12 @@ int main() {
             std::cout << v;
         }
         std::cout << std::endl;
+
+        std::sort(std::begin(target), std::end(target));
+        for(auto const &v : target) {
+            std::cout << v;
+        }
+        std::cout << std::endl;
     }
     return 0;
 }
