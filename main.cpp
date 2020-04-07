@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 struct base {
     base() {
@@ -54,6 +55,17 @@ int main() {
         ::hello(b);
         derived d;
         ::hello(d);
+    }
+    {
+        using string = std::string;
+
+        string s;
+
+        s = "I'm a string";
+        std::cout << s << std::endl;
+
+        s += ".";
+        std::cout << s << std::endl;
     }
     std::cout << "Hello, World!" << std::endl;
     return 0;
