@@ -1,0 +1,26 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+
+  linux:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Configure
+        run : mkdir -p build && cd build && cmake ..
+      - name: Compile tests
+        working-directory: build
+        env:
+          CXX: ${{ matrix.compiler }}
+        run: make -j4
+      - name: Run tests
+        working-directory: build
+        run: ./morbida_01
