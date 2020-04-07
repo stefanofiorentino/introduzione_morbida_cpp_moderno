@@ -37,6 +37,15 @@ int main() {
             std::cout << v;
         }
         std::cout << std::endl;
+
+        int_vector odd_target;
+        std::copy_if(std::begin(target), std::end(target), std::back_inserter(odd_target), [](auto const &v) {
+            return v % 2;
+        });
+        for(auto const &v : odd_target) {
+            std::cout << v;
+        }
+        std::cout << std::endl;
     }
     return 0;
 }
