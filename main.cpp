@@ -66,6 +66,32 @@ int main() {
 
         s += ".";
         std::cout << s << std::endl;
+        std::cout << s.capacity() << std::endl;
+        std::cout << s.size() << std::endl;
+        std::cout << std::endl;
+
+        s.shrink_to_fit();
+        std::cout << s.capacity() << std::endl;
+        std::cout << std::endl;
+
+        s += s;
+        std::cout << s.capacity() << std::endl;
+        std::cout << s.size() << std::endl;
+        std::cout << std::endl;
+
+        s.shrink_to_fit();  // introduced in C++11 (modern??)
+        std::cout << s.capacity() << std::endl;
+        std::cout << s.size() << std::endl;
+        std::cout << std::endl;
+
+        string a = "I'm another string"; // string creation
+        a += "."; // string manipulation
+        for(auto it = 0u; it < 15u; it++) {
+            a += a; // appending allthings
+        }
+        std::cout << a.capacity() << std::endl; // capacity is twice the size (!!)
+        std::cout << a.size() << std::endl;
+        std::cout << std::endl;
     }
     std::cout << "Hello, World!" << std::endl;
     return 0;
