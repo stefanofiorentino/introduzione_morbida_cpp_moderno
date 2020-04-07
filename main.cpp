@@ -8,7 +8,7 @@ struct base {
 
     virtual ~base();
 
-    virtual void hello() {
+    virtual void hello() const {
         std::cout << "Hello, I'm base" << std::endl;
     }
 };
@@ -26,13 +26,13 @@ struct derived : public base {
         std::cout << "derived d'ctor" << std::endl;
     }
 
-    void hello() override {
+    void hello() const override {
         std::cout << "Hello, I'm derived" << std::endl;
     }
 };
 
 namespace {
-    void hello(base &b) {
+    void hello(base const &b) {
         b.hello();
     }
 }
