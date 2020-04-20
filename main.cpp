@@ -36,13 +36,11 @@ namespace {
 
 int main() {
     {
-        std::shared_ptr<base> b_ptr = std::make_shared<base>();
-        ::hello(b_ptr.get());
-        ::hello(b_ptr);
-    }
-    {
-        std::shared_ptr<base> b_ptr; // miss the instantiation
-        ::hello(b_ptr);
+        std::shared_ptr<base> bs_ptr = std::make_unique<base>();
+        std::unique_ptr<base> bu_ptr; // = std::make_shared<base>(); // does not compile!
+
+        bs_ptr = std::move(bu_ptr);
+        // bu_ptr = std::move(bs_ptr); // does not compile
     }
     return 0;
 }
