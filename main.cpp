@@ -28,6 +28,9 @@ namespace {
         if(auto b_ptr = weak_base.lock()) { // doesn't lock
             b_ptr->hello();
         }
+        else {
+            std::cout << "b_ptr is nullptr" << std::endl;
+        }
     }
 }
 
@@ -35,6 +38,10 @@ int main() {
     {
         std::shared_ptr<base> b_ptr = std::make_shared<base>();
         ::hello(b_ptr.get());
+        ::hello(b_ptr);
+    }
+    {
+        std::shared_ptr<base> b_ptr; // miss the instantiation
         ::hello(b_ptr);
     }
     return 0;
