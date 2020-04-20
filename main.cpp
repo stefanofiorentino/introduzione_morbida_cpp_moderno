@@ -42,9 +42,6 @@ namespace {
 
 int main() {
     {
-        std::unique_ptr<base> bp = std::make_unique<base>();
-        hello(std::move(bp)); // after this line bp is not pointing anymore to a base instance
-
         std::unique_ptr<derived> dp = std::make_unique<derived>();
         hello(std::move(dp));
     }
