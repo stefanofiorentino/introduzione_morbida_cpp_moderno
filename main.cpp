@@ -1,51 +1,30 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
-template<class T> using vector = std::vector<T>; // introduced in C++11 (modern??)
+#define _USE_MATH_DEFINES
+#include <cmath>
 
-using int_vector = vector<int>; // introduced in C++11 (modern??)
+using float_vector = std::vector<float>;
 
 int main() {
     {
-        vector<int> values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        for(auto const &v : values) {
-            std::cout << v;
-        }
-        std::cout << std::endl;
-    }
-    {
-        int_vector values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        for(auto const &v : values) {
-            std::cout << v;
-        }
-        std::cout << std::endl;
-    }
-    {
-        int_vector values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        constexpr auto N = 101; // since C++11
+        constexpr auto step = M_PI / (N-1);
 
-        int_vector target;
-//        std::copy(std::rbegin(values), std::rend(values), std::back_inserter(target));
-        target.assign(std::rbegin(values), std::rend(values));
-        for(auto const &v : target) {
-            std::cout << v;
-        }
-        std::cout << std::endl;
+        float_vector target;
+        target.reserve(N); // size=0, capacity=N
 
-        std::sort(std::begin(target), std::end(target));
-        for(auto const &v : target) {
-            std::cout << v;
+        for(auto it = 0; it < N; ++it) {
+            target.emplace_back(it*step);
         }
-        std::cout << std::endl;
-
-        int_vector odd_target;
-        std::copy_if(std::begin(target), std::end(target), std::back_inserter(odd_target), [](auto const &v) {
-            return v % 2;
+        std::for_each(std::begin(target), std::end(target), [](decltype(target)::value_type &v) { // decltype: since C++11
+            v = std::sin(v);
         });
-        for(auto const &v : odd_target) {
-            std::cout << v;
-        }
-        std::cout << std::endl;
+
+        auto sum = std::accumulate(std::begin(target), std::end(target), 0.f) / N;
+        std::cout << sum << std::endl;
     }
     return 0;
 }
