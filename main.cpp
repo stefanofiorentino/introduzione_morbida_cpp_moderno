@@ -2,29 +2,51 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <memory>
 
-#define _USE_MATH_DEFINES
-#include <cmath>
+struct base {
+    base() {
+        std::cout << "base ctor" << std::endl;
+    }
 
-using float_vector = std::vector<float>;
+    virtual ~base();
+
+    virtual void hello() const {
+        std::cout << "Hello, I'm base" << std::endl;
+    }
+};
+
+base::~base() {
+    std::cout << "base d'ctor" << std::endl;
+}
+
+struct derived : public base {
+    derived() {
+        std::cout << "derived ctor" << std::endl;
+    }
+
+    ~derived() override {
+        std::cout << "derived d'ctor" << std::endl;
+    }
+
+    void hello() const override {
+        std::cout << "Hello, I'm derived" << std::endl;
+    }
+};
+
+namespace {
+    void hello(std::unique_ptr<base> bp) {
+        bp->hello();
+    } // qui avviene la distruzione
+}
 
 int main() {
     {
-        constexpr auto N = 101; // since C++11
-        constexpr auto step = M_PI / (N-1);
+        std::unique_ptr<base> bp = std::make_unique<base>();
+        hello(std::move(bp)); // after this line bp is not pointing anymore to a base instance
 
-        float_vector target;
-        target.reserve(N); // size=0, capacity=N
-
-        for(auto it = 0; it < N; ++it) {
-            target.emplace_back(it*step);
-        }
-        std::for_each(std::begin(target), std::end(target), [](decltype(target)::value_type &v) { // decltype: since C++11
-            v = std::sin(v);
-        });
-
-        auto sum = std::accumulate(std::begin(target), std::end(target), 0.f) / N;
-        std::cout << sum << std::endl;
+        std::unique_ptr<derived> dp = std::make_unique<derived>();
+        hello(std::move(dp));
     }
     return 0;
 }
