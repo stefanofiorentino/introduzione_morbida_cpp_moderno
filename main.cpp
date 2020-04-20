@@ -12,22 +12,30 @@ struct base {
     void hello() const {
         std::cout << "Hello, I'm base" << std::endl;
     }
+
+    ~base() {
+        std::cout << "base d'ctor" << std::endl;
+    }
 };
 
 namespace {
     void hello(base *bp) { // legacy code
         bp->hello();
-        delete bp; // this is missing in 80% of code, so it leaks
+        // delete bp; // in this case you should not delete
+    }
+
+    void hello(std::weak_ptr<base> weak_base) {
+        if(auto b_ptr = weak_base.lock()) { // doesn't lock
+            b_ptr->hello();
+        }
     }
 }
 
 int main() {
     {
-        base *legacy_bp = new base; // ** PLEASE ** don't try this at work
-        hello(legacy_bp);
-
-        std::unique_ptr<base> bup = std::make_unique<base>();
-        hello(bup.release()); // only for legacy code: release the ownership
+        std::shared_ptr<base> b_ptr = std::make_shared<base>();
+        ::hello(b_ptr.get());
+        ::hello(b_ptr);
     }
     return 0;
 }
