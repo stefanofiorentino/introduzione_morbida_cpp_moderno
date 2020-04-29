@@ -1,28 +1,32 @@
 #include <iostream>
-
-//double abs(double x) {
-//    return (x >= 0) ? x : -x;
-//}
+#include <memory>
+//struct int_list {
+//    int data;
+//    int_list *next;
+//};
 //
-//int abs(int x) {
-//    return (x >= 0) ? x : -x;
-//}
+//struct double_list {
+//    double data;
+//    double_list *next;
+//};
 
 template<typename T>
-T abs(T x) {
-    return (x >= 0) ? x : -x;
-}
+struct list {
+    T data;
+    std::unique_ptr<list<T>> next;
+};
 
 int main() {
-    std::cout << abs(-3.) << std::endl;
-    std::cout << abs(-30) << std::endl;
 
-    double (*dabsd)(double) = abs<double>;
-    std::cout << dabsd(-3.) << std::endl;
-    std::cout << abs<int>(-3) << std::endl;
+    auto head = std::make_unique<list<int>>();
+    head->data = -3;
 
-    static_assert(std::is_same_v<double, decltype(abs<double>(-3))>, "");
-    static_assert(std::is_same_v<int, decltype(abs<int>(-3.))>, "");
+    auto node = std::make_unique<list<int>>();
+    node->data = 42;
+    head->next = std::move(node);
 
+    for(auto it = head.get(); it != nullptr; it = it->next.get()) {
+        std::cout << it->data << std::endl;
+    }
     return 0;
 }
