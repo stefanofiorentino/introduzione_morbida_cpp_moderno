@@ -1,46 +1,28 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-#include <memory>
 
-struct base {
-    base() {
-        std::cout << "base ctor" << std::endl;
-    }
+//double abs(double x) {
+//    return (x >= 0) ? x : -x;
+//}
+//
+//int abs(int x) {
+//    return (x >= 0) ? x : -x;
+//}
 
-    void hello() const {
-        std::cout << "Hello, I'm base" << std::endl;
-    }
-
-    ~base() {
-        std::cout << "base d'ctor" << std::endl;
-    }
-};
-
-namespace {
-    void hello(base *bp) { // legacy code
-        bp->hello();
-        // delete bp; // in this case you should not delete
-    }
-
-    void hello(std::weak_ptr<base> weak_base) {
-        if(auto b_ptr = weak_base.lock()) { // doesn't lock
-            b_ptr->hello();
-        }
-        else {
-            std::cout << "b_ptr is nullptr" << std::endl;
-        }
-    }
+template<typename T>
+T abs(T x) {
+    return (x >= 0) ? x : -x;
 }
 
 int main() {
-    {
-        std::shared_ptr<base> bs_ptr = std::make_unique<base>();
-        std::unique_ptr<base> bu_ptr; // = std::make_shared<base>(); // does not compile!
+    std::cout << abs(-3.) << std::endl;
+    std::cout << abs(-30) << std::endl;
 
-        bs_ptr = std::move(bu_ptr);
-        // bu_ptr = std::move(bs_ptr); // does not compile
-    }
+    double (*dabsd)(double) = abs<double>;
+    std::cout << dabsd(-3.) << std::endl;
+    std::cout << abs<int>(-3) << std::endl;
+
+    static_assert(std::is_same_v<double, decltype(abs<double>(-3))>, "");
+    static_assert(std::is_same_v<int, decltype(abs<int>(-3.))>, "");
+
     return 0;
 }
