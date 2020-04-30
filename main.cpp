@@ -7,8 +7,11 @@ void hello(F &&f, Args... args) {
 }
 
 int main() {
-    hello([](std::string const &name) {
-        std::cout << "Hello " << name << std::endl;
+    bool print{true};
+    hello([print](std::string const &name) {
+        if(print) {
+            std::cout << "Hello " << name << std::endl;
+        }
     }, "folks!");
     return 0;
 }
