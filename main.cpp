@@ -1,28 +1,15 @@
 #include <iostream>
-#include <memory>
 
-template<typename Implementer>
-struct Interface
-{
-    void hello()
-    {
-        static_cast<Implementer *>(this)->helloImpl();
-    }
-};
+// Arthur O'Dwyer
 
-struct Hello : public Interface<Hello>
-{
-    void helloImpl() {
-        std::cout << "Hello" << std::endl;
-    }
-};
-
-struct NotDerivedFromInterface{};
+template<typename T, typename... Us>
+void f(Us... us) {
+    std::puts(__PRETTY_FUNCTION__);
+}
 
 int main() {
-    std::make_unique<Hello>()->hello();
-    static_assert(std::is_base_of_v<Interface<Hello>, Hello>, "");
-    static_assert(!std::is_base_of_v<Interface<NotDerivedFromInterface>, NotDerivedFromInterface>, "");
-
+    f<char>(0, 1, 2);
+    f<char, char>(0, 1, 2);
+    f<char, char>(0, 1, 2, 4, 5, 6, 7);
     return 0;
 }
