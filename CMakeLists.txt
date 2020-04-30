@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 option(USE_UBSAN "Use address sanitizer by adding -fsanitize=undefined -fno-sanitize-recover=all -fno-omit-frame-pointer flags" OFF)
 
 add_executable(morbida_01 main.cpp)
+target_link_libraries(morbida_01 PUBLIC pthread)
 
 if(USE_UBSAN)
     target_compile_options(morbida_01 PUBLIC $<$<CONFIG:Debug>:-fsanitize=undefined -fno-sanitize-recover=all -fno-omit-frame-pointer>)
