@@ -7,11 +7,13 @@ void hello(F &&f, Args... args) {
 }
 
 int main() {
-    bool print{true};
-    hello([print](std::string const &name) {
-        if(print) {
-            std::cout << "Hello " << name << std::endl;
-        }
+    bool printed{false};
+    hello([&printed](std::string const &name) {
+        std::cout << "Hello " << name << std::endl;
+        printed = true;
     }, "folks!");
+    if(printed) {
+        std::cout << "printed" << std::endl;
+    }
     return 0;
 }
